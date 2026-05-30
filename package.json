@@ -1,0 +1,32 @@
+{
+  "name": "ayogram-backend",
+  "type": "module",
+  "scripts": {
+    "lintcheck": "eslint . && tsc --noEmit",
+    "build": "npm run lintcheck && tsc",
+    "start": "node ./dist/src/main.js",
+    "start:dev": "tsx watch ./src/main.ts",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.14",
+    "hono": "^4.12.22"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^20.11.17",
+    "eslint": "^10.4.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-simple-import-sort": "^13.0.0",
+    "globals": "^17.6.0",
+    "husky": "^9.1.7",
+    "jiti": "^2.7.0",
+    "prettier": "^3.8.3",
+    "tsx": "^4.7.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.4"
+  }
+}

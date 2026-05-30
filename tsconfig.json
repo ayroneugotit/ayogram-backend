@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "./dist",
+
+    "target": "ESNext",
+    "module": "NodeNext",
+    "types": ["node"],
+
+    "strict": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "dist"]
+}
