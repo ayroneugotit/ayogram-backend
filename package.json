@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.19.14",
-    "hono": "^4.12.22"
+    "dotenv": "^17.4.2",
+    "hono": "^4.12.22",
+    "inversify": "^8.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "^10.0.1",
+    "@types/inversify": "^2.0.32",
     "@types/node": "^20.11.17",
     "eslint": "^10.4.0",
     "eslint-config-prettier": "^10.1.8",
