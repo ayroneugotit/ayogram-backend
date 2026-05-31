@@ -9,7 +9,7 @@
 
   "overrides": [
     {
-      "files": ["*.json", "*.prettierrc"],
+      "files": ["*.json", "*.prettierrc", "*.yml"],
       "options": {
         "tabWidth": 2
       }

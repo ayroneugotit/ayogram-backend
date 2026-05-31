@@ -4,4 +4,5 @@ export const IDENTIFIERS = {
     ShapingMiddleware: Symbol.for('ShapingMiddleware'),
     NotFoundHandler: Symbol.for('NotFoundHandler'),
     ErrorHandler: Symbol.for('ErrorHandler'),
+    PrismaDatabase: Symbol.for('PrismaDatabase'),
 };

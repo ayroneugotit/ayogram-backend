@@ -11,6 +11,7 @@ import { NotFoundHandler } from './core/handlers/notfound/notfound.handler.js';
 import { IDENTIFIERS } from './core/identifiers.js';
 import type { IMiddleware } from './core/middlewares/middleware.interface.js';
 import { ShapingMiddleware } from './core/middlewares/shaping/shaping.middleware.js';
+import { PrismaDatabase } from './infrastructure/database/prisma.database.js';
 
 export function createAppContainer(): Container {
     const appContainer = new Container();
@@ -19,5 +20,6 @@ export function createAppContainer(): Container {
     appContainer.bind<IMiddleware>(IDENTIFIERS.ShapingMiddleware).to(ShapingMiddleware).inSingletonScope();
     appContainer.bind<INotFoundHandler>(IDENTIFIERS.NotFoundHandler).to(NotFoundHandler).inSingletonScope();
     appContainer.bind<IErrorHandler>(IDENTIFIERS.ErrorHandler).to(ErrorHandler).inSingletonScope();
+    appContainer.bind<PrismaDatabase>(IDENTIFIERS.PrismaDatabase).to(PrismaDatabase).inSingletonScope();
     return appContainer;
 }
