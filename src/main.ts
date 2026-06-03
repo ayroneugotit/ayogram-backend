@@ -1,6 +1,6 @@
 import { configDotenv } from 'dotenv';
 
-import { createAppContainer } from './container.js';
+import { createAppContainer } from './container/container.js';
 import type { IApp } from './core/app/app.interface.js';
 import { IDENTIFIERS } from './core/identifiers.js';
 import type { PrismaDatabase } from './infrastructure/database/prisma.database.js';
