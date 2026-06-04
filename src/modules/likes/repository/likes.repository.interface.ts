@@ -1,7 +1,7 @@
 import type { Like } from '../../../../prisma/generated/client.js';
 
 export interface ILikesRepository {
-    create: (postId: string, userId: string) => Promise<Like>;
-    getByPostAndUserIds: (postId: string, userId: string) => Promise<Like | null>;
-    delete: (postId: string, userId: string) => Promise<Like>;
+    create: (userId: string, postId: string) => Promise<Like>;
+    getByPostAndUserIds: (userId: string, postId: string) => Promise<Like | null>;
+    delete: (userId: string, postId: string) => Promise<Like>;
 }

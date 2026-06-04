@@ -12,15 +12,15 @@ export class PrismaLikesRepository extends APrismaRepository implements ILikesRe
         super(prismaDatabase);
     }
 
-    public create(postId: string, userId: string): Promise<Like> {
+    public create(userId: string, postId: string): Promise<Like> {
         return this.database.like.create({ data: { postId, userId } });
     }
 
-    public getByPostAndUserIds(postId: string, userId: string): Promise<Like | null> {
+    public getByPostAndUserIds(userId: string, postId: string): Promise<Like | null> {
         return this.database.like.findUnique({ where: { postId_userId: { postId, userId } } });
     }
 
-    public delete(postId: string, userId: string): Promise<Like> {
+    public delete(userId: string, postId: string): Promise<Like> {
         return this.database.like.delete({ where: { postId_userId: { postId, userId } } });
     }
 }

@@ -1,10 +1,11 @@
 import { inject, injectable } from 'inversify';
 
 import type { Comment } from '../../../../prisma/generated/client.js';
+import { HTTPError } from '../../../core/errors/http.error.js';
 import { IDENTIFIERS } from '../../../core/identifiers.js';
 import type { IPostsGuard } from '../../posts/guard/posts.guard.interface.js';
-import type { IUsersGuard } from '../../users/guard/users.guard.interface.js';
 import type { ICommentsGuard } from '../guard/comments.guard.interface.js';
+import type { ICommentsPolicy } from '../policy/comments.policy.interface.js';
 import type { ICommentsRepository } from '../repository/comments.repository.interface.js';
 import type { ICommentsService } from './comments.service.interface.js';
 
@@ -14,25 +15,62 @@ export class CommentsService implements ICommentsService {
         @inject(IDENTIFIERS.CommentsRepository) private readonly repository: ICommentsRepository,
         @inject(IDENTIFIERS.CommentsGuard) private readonly commentsGuard: ICommentsGuard,
         @inject(IDENTIFIERS.PostsGuard) private readonly postsGuard: IPostsGuard,
-        @inject(IDENTIFIERS.UsersGuard) private readonly usersGuard: IUsersGuard,
+        @inject(IDENTIFIERS.CommentsPolicy) private readonly policy: ICommentsPolicy,
     ) {}
 
-    public async create(postId: string, userId: string, body: string): Promise<Comment> {
-        await this.postsGuard.ensurePostExists(postId);
-        await this.usersGuard.ensureUserExists(userId);
+    public async create({
+        currentUserId,
+        targetPostId,
+        body,
+    }: {
+        currentUserId: string;
+        targetPostId: string;
+        body: string;
+    }): Promise<Comment> {
+        await this.postsGuard.ensurePostExists(targetPostId);
 
-        return this.repository.create(postId, userId, body);
+        return this.repository.create(currentUserId, targetPostId, body);
     }
 
-    public async update(id: string, body: string): Promise<Comment> {
-        await this.commentsGuard.ensureCommentExists(id);
+    public async update({
+        currentUserId,
+        targetCommentId,
+        body,
+    }: {
+        currentUserId: string;
+        targetCommentId: string;
+        body: string;
+    }): Promise<Comment> {
+        const targetComment = await this.commentsGuard.ensureCommentExists(targetCommentId);
 
-        return this.repository.update(id, body);
+        if (!this.policy.canUpdate(currentUserId, targetComment)) {
+            throw new HTTPError({
+                message: 'forbidden',
+                status: 403,
+                source: this.constructor.name,
+            });
+        }
+
+        return this.repository.update(targetCommentId, body);
     }
 
-    public async delete(id: string): Promise<Comment> {
-        await this.commentsGuard.ensureCommentExists(id);
+    public async delete({
+        currentUserId,
+        targetCommentId,
+    }: {
+        currentUserId: string;
+        targetCommentId: string;
+    }): Promise<Comment> {
+        const targetComment = await this.commentsGuard.ensureCommentExists(targetCommentId);
 
-        return this.repository.delete(id);
+        if (!this.policy.canUpdate(currentUserId, targetComment)) {
+            throw new HTTPError({
+                message: 'forbidden',
+                status: 403,
+                source: this.constructor.name,
+            });
+        }
+
+        return this.repository.delete(targetCommentId);
     }
 }

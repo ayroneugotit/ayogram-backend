@@ -10,8 +10,8 @@ import type { ILikesGuard } from './likes.guard.interface.js';
 export class LikesGuard implements ILikesGuard {
     public constructor(@inject(IDENTIFIERS.LikesRepository) private readonly repository: ILikesRepository) {}
 
-    public async ensureLikeExists(postId: string, userId: string): Promise<Like> {
-        const like = await this.repository.getByPostAndUserIds(postId, userId);
+    public async ensureLikeExists(userId: string, postId: string): Promise<Like> {
+        const like = await this.repository.getByPostAndUserIds(userId, postId);
         if (!like) {
             throw new HTTPError({
                 message: 'like not found',
@@ -22,8 +22,8 @@ export class LikesGuard implements ILikesGuard {
         return like;
     }
 
-    public async ensureLikeDoesNotExist(postId: string, userId: string): Promise<void> {
-        const like = await this.repository.getByPostAndUserIds(postId, userId);
+    public async ensureLikeDoesNotExist(userId: string, postId: string): Promise<void> {
+        const like = await this.repository.getByPostAndUserIds(userId, postId);
         if (like) {
             throw new HTTPError({
                 message: 'this user already liked this post',

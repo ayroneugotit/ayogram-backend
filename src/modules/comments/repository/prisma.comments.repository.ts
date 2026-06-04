@@ -12,8 +12,8 @@ export class PrismaCommentsRepository extends APrismaRepository implements IComm
         super(prismaDatabase);
     }
 
-    public create(postId: string, userId: string, body: string): Promise<Comment> {
-        return this.database.comment.create({ data: { postId, userId, body } });
+    public create(userId: string, postId: string, body: string): Promise<Comment> {
+        return this.database.comment.create({ data: { userId, postId, body } });
     }
 
     public getById(id: string): Promise<Comment | null> {

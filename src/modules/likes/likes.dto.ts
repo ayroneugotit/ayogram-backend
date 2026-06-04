@@ -1,9 +1,15 @@
-export type LikeCreateDTO = {
-    postId: string;
-    userId: string;
-};
+import { IsDefined, IsNotEmpty, IsString } from 'class-validator';
 
-export type LikeDeleteDTO = {
-    postId: string;
-    userId: string;
-};
+export class LikeCreateDTO {
+    @IsDefined()
+    @IsNotEmpty()
+    @IsString()
+    public readonly postId!: string;
+}
+
+export class LikeDeleteDTO {
+    @IsDefined()
+    @IsNotEmpty()
+    @IsString()
+    public readonly postId!: string;
+}

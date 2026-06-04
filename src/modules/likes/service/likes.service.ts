@@ -1,10 +1,11 @@
 import { inject, injectable } from 'inversify';
 
 import type { Like } from '../../../../prisma/generated/client.js';
+import { HTTPError } from '../../../core/errors/http.error.js';
 import { IDENTIFIERS } from '../../../core/identifiers.js';
 import type { IPostsGuard } from '../../posts/guard/posts.guard.interface.js';
-import type { IUsersGuard } from '../../users/guard/users.guard.interface.js';
 import type { ILikesGuard } from '../guard/likes.guard.interface.js';
+import type { ILikesPolicy } from '../policy/likes.policy.interface.js';
 import type { ILikesRepository } from '../repository/likes.repository.interface.js';
 import type { ILikesService } from './likes.service.interface.js';
 
@@ -14,22 +15,40 @@ export class LikesService implements ILikesService {
         @inject(IDENTIFIERS.LikesRepository) private readonly repository: ILikesRepository,
         @inject(IDENTIFIERS.LikesGuard) private readonly likesGuard: ILikesGuard,
         @inject(IDENTIFIERS.PostsGuard) private readonly postsGuard: IPostsGuard,
-        @inject(IDENTIFIERS.UsersGuard) private readonly usersGuard: IUsersGuard,
+        @inject(IDENTIFIERS.LikesPolicy) private readonly policy: ILikesPolicy,
     ) {}
 
-    public async create(postId: string, userId: string): Promise<Like> {
-        await this.postsGuard.ensurePostExists(postId);
-        await this.usersGuard.ensureUserExists(userId);
-        await this.likesGuard.ensureLikeDoesNotExist(postId, userId);
+    public async create({
+        currentUserId,
+        targetPostId,
+    }: {
+        currentUserId: string;
+        targetPostId: string;
+    }): Promise<Like> {
+        await this.postsGuard.ensurePostExists(targetPostId);
+        await this.likesGuard.ensureLikeDoesNotExist(currentUserId, targetPostId);
 
-        return this.repository.create(postId, userId);
+        return this.repository.create(currentUserId, targetPostId);
     }
 
-    public async delete(postId: string, userId: string): Promise<Like> {
-        await this.postsGuard.ensurePostExists(postId);
-        await this.usersGuard.ensureUserExists(userId);
-        await this.likesGuard.ensureLikeExists(postId, userId);
+    public async delete({
+        currentUserId,
+        targetPostId,
+    }: {
+        currentUserId: string;
+        targetPostId: string;
+    }): Promise<Like> {
+        await this.postsGuard.ensurePostExists(targetPostId);
+        const targetLike = await this.likesGuard.ensureLikeExists(currentUserId, targetPostId);
 
-        return this.repository.delete(postId, userId);
+        if (!this.policy.canDelete(currentUserId, targetLike)) {
+            throw new HTTPError({
+                message: 'forbidden',
+                status: 403,
+                source: this.constructor.name,
+            });
+        }
+
+        return this.repository.delete(currentUserId, targetPostId);
     }
 }

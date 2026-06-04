@@ -5,6 +5,8 @@ import type { IProfilesController } from '../modules/profiles/controller/profile
 import { ProfilesController } from '../modules/profiles/controller/profiles.controller.js';
 import type { IProfilesGuard } from '../modules/profiles/guard/profiles.guard.interface.js';
 import { ProfilesGuard } from '../modules/profiles/guard/profiles.guard.js';
+import type { IProfilesPolicy } from '../modules/profiles/policy/profiles.policy.interface.js';
+import { ProfilesPolicy } from '../modules/profiles/policy/profiles.policy.js';
 import { PrismaProfilesRepository } from '../modules/profiles/repository/prisma.profiles.repository.js';
 import type { IProfilesRepository } from '../modules/profiles/repository/profiles.repository.interface.js';
 import type { IProfilesService } from '../modules/profiles/service/profiles.service.interface.js';
@@ -15,6 +17,7 @@ export function createProfilesContainerModule(): ContainerModule {
         const { bind } = options;
         bind<IProfilesController>(IDENTIFIERS.ProfilesController).to(ProfilesController).inSingletonScope();
         bind<IProfilesService>(IDENTIFIERS.ProfilesService).to(ProfilesService).inSingletonScope();
+        bind<IProfilesPolicy>(IDENTIFIERS.ProfilesPolicy).to(ProfilesPolicy).inSingletonScope();
         bind<IProfilesGuard>(IDENTIFIERS.ProfilesGuard).to(ProfilesGuard).inSingletonScope();
         bind<IProfilesRepository>(IDENTIFIERS.ProfilesRepository)
             .to(PrismaProfilesRepository)

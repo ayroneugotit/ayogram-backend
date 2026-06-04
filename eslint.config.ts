@@ -24,6 +24,7 @@ export default defineConfig([
             '@typescript-eslint/explicit-member-accessibility': 'error',
             '@typescript-eslint/method-signature-style': 'error',
             '@typescript-eslint/unified-signatures': 'off',
+            '@typescript-eslint/no-invalid-void-type': 'off',
         },
     },
 ]);
