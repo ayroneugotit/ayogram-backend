@@ -3,8 +3,6 @@ import { ContainerModule } from 'inversify';
 import { IDENTIFIERS } from '../core/identifiers.js';
 import type { IPostsController } from '../modules/posts/controller/posts.controller.interface.js';
 import { PostsController } from '../modules/posts/controller/posts.controller.js';
-import type { IPostsGuard } from '../modules/posts/guard/posts.guard.interface.js';
-import { PostsGuard } from '../modules/posts/guard/posts.guard.js';
 import type { IPostsPolicy } from '../modules/posts/policy/posts.policy.interface.js';
 import { PostsPolicy } from '../modules/posts/policy/posts.policy.js';
 import type { IPostsRepository } from '../modules/posts/repository/posts.repository.interface.js';
@@ -18,7 +16,6 @@ export function createPostsContainerModule(): ContainerModule {
         bind<IPostsController>(IDENTIFIERS.PostsController).to(PostsController).inSingletonScope();
         bind<IPostsService>(IDENTIFIERS.PostsService).to(PostsService).inSingletonScope();
         bind<IPostsPolicy>(IDENTIFIERS.PostsPolicy).to(PostsPolicy).inSingletonScope();
-        bind<IPostsGuard>(IDENTIFIERS.PostsGuard).to(PostsGuard).inSingletonScope();
         bind<IPostsRepository>(IDENTIFIERS.PostsRepository).to(PrismaPostsRepository).inSingletonScope();
     });
 }

@@ -3,8 +3,6 @@ import { ContainerModule } from 'inversify';
 import { IDENTIFIERS } from '../core/identifiers.js';
 import type { ILikesController } from '../modules/likes/controller/likes.controller.interface.js';
 import { LikesController } from '../modules/likes/controller/likes.controller.js';
-import type { ILikesGuard } from '../modules/likes/guard/likes.guard.interface.js';
-import { LikesGuard } from '../modules/likes/guard/likes.guard.js';
 import type { ILikesPolicy } from '../modules/likes/policy/likes.policy.interface.js';
 import { LikesPolicy } from '../modules/likes/policy/likes.policy.js';
 import type { ILikesRepository } from '../modules/likes/repository/likes.repository.interface.js';
@@ -18,7 +16,6 @@ export function createLikesContainerModule(): ContainerModule {
         bind<ILikesController>(IDENTIFIERS.LikesController).to(LikesController).inSingletonScope();
         bind<ILikesService>(IDENTIFIERS.LikesService).to(LikesService).inSingletonScope();
         bind<ILikesPolicy>(IDENTIFIERS.LikesPolicy).to(LikesPolicy).inSingletonScope();
-        bind<ILikesGuard>(IDENTIFIERS.LikesGuard).to(LikesGuard).inSingletonScope();
         bind<ILikesRepository>(IDENTIFIERS.LikesRepository).to(PrismaLikesRepository).inSingletonScope();
     });
 }

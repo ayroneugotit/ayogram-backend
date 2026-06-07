@@ -3,8 +3,6 @@ import { ContainerModule } from 'inversify';
 import { IDENTIFIERS } from '../core/identifiers.js';
 import type { IProfilesController } from '../modules/profiles/controller/profiles.controller.interface.js';
 import { ProfilesController } from '../modules/profiles/controller/profiles.controller.js';
-import type { IProfilesGuard } from '../modules/profiles/guard/profiles.guard.interface.js';
-import { ProfilesGuard } from '../modules/profiles/guard/profiles.guard.js';
 import type { IProfilesPolicy } from '../modules/profiles/policy/profiles.policy.interface.js';
 import { ProfilesPolicy } from '../modules/profiles/policy/profiles.policy.js';
 import { PrismaProfilesRepository } from '../modules/profiles/repository/prisma.profiles.repository.js';
@@ -18,7 +16,6 @@ export function createProfilesContainerModule(): ContainerModule {
         bind<IProfilesController>(IDENTIFIERS.ProfilesController).to(ProfilesController).inSingletonScope();
         bind<IProfilesService>(IDENTIFIERS.ProfilesService).to(ProfilesService).inSingletonScope();
         bind<IProfilesPolicy>(IDENTIFIERS.ProfilesPolicy).to(ProfilesPolicy).inSingletonScope();
-        bind<IProfilesGuard>(IDENTIFIERS.ProfilesGuard).to(ProfilesGuard).inSingletonScope();
         bind<IProfilesRepository>(IDENTIFIERS.ProfilesRepository)
             .to(PrismaProfilesRepository)
             .inSingletonScope();

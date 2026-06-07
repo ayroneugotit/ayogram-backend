@@ -6,6 +6,7 @@ import type { IController } from '../controllers/controller.interface.js';
 import { AppError } from '../errors/app.error.js';
 import type { IErrorHandler } from '../handlers/error/error.handler.interface.js';
 import type { INotFoundHandler } from '../handlers/notfound/notfound.handler.interface.js';
+import type { ILogger } from '../loggers/logger.interface.js';
 import type { IMiddleware } from '../middlewares/middleware.interface.js';
 import type { IAppConfig } from './app.config.interface.js';
 import type { IApp } from './app.interface.js';
@@ -20,6 +21,7 @@ export abstract class AApp implements IApp {
         private readonly shapingMiddleware: IMiddleware,
         private readonly notFoundHandler: INotFoundHandler,
         private readonly errorHandler: IErrorHandler,
+        private readonly logger: ILogger,
     ) {
         this.hono = new Hono();
         this.controllers = [];
@@ -28,7 +30,7 @@ export abstract class AApp implements IApp {
     protected addController(controller: IController): void {
         if (this.controllers.find((c) => c.path === controller.path)) {
             throw new AppError({
-                message: 'controller with this path already exists',
+                message: `controller with path '${controller.path}' already exists`,
                 source: this.constructor.name,
             });
         }
@@ -53,6 +55,11 @@ export abstract class AApp implements IApp {
                 for (const part of pipeline) {
                     this.hono[method](path, part);
                 }
+
+                this.logger.info(
+                    this.constructor.name,
+                    `added handler for '${method}' requests at ${controllerPath + endpointPath}`,
+                );
             }
         }
     }
@@ -61,9 +68,9 @@ export abstract class AApp implements IApp {
         this.configure();
 
         try {
-            serve({
-                fetch: this.hono.fetch,
-                port: this.config.port,
+            serve({ fetch: this.hono.fetch, port: this.config.port }, () => {
+                const url = `http://localhost:${this.config.port}${this.config.basePath}`;
+                this.logger.info(this.constructor.name, `server started at ${url}`);
             });
         } catch {
             throw new AppError({

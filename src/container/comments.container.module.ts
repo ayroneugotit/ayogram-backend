@@ -3,8 +3,6 @@ import { ContainerModule } from 'inversify';
 import { IDENTIFIERS } from '../core/identifiers.js';
 import type { ICommentsController } from '../modules/comments/controller/comments.controller.interface.js';
 import { CommentsController } from '../modules/comments/controller/comments.controller.js';
-import type { ICommentsGuard } from '../modules/comments/guard/comments.guard.interface.js';
-import { CommentsGuard } from '../modules/comments/guard/comments.guard.js';
 import type { ICommentsPolicy } from '../modules/comments/policy/comments.policy.interface.js';
 import { CommentsPolicy } from '../modules/comments/policy/comments.policy.js';
 import type { ICommentsRepository } from '../modules/comments/repository/comments.repository.interface.js';
@@ -18,7 +16,6 @@ export function createCommentsContainerModule(): ContainerModule {
         bind<ICommentsController>(IDENTIFIERS.CommentsController).to(CommentsController).inSingletonScope();
         bind<ICommentsService>(IDENTIFIERS.CommentsService).to(CommentsService).inSingletonScope();
         bind<ICommentsPolicy>(IDENTIFIERS.CommentsPolicy).to(CommentsPolicy).inSingletonScope();
-        bind<ICommentsGuard>(IDENTIFIERS.CommentsGuard).to(CommentsGuard).inSingletonScope();
         bind<ICommentsRepository>(IDENTIFIERS.CommentsRepository)
             .to(PrismaCommentsRepository)
             .inSingletonScope();

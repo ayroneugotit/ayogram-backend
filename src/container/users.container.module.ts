@@ -3,8 +3,6 @@ import { ContainerModule } from 'inversify';
 import { IDENTIFIERS } from '../core/identifiers.js';
 import type { IUsersController } from '../modules/users/controller/users.controller.interface.js';
 import { UsersController } from '../modules/users/controller/users.controller.js';
-import type { IUsersGuard } from '../modules/users/guard/users.guard.interface.js';
-import { UsersGuard } from '../modules/users/guard/users.guard.js';
 import type { IUsersPolicy } from '../modules/users/policy/users.policy.interface.js';
 import { UsersPolicy } from '../modules/users/policy/users.policy.js';
 import { PrismaUsersRepository } from '../modules/users/repository/prisma.users.repository.js';
@@ -18,7 +16,6 @@ export function createUsersContainerModule(): ContainerModule {
         bind<IUsersController>(IDENTIFIERS.UsersController).to(UsersController).inSingletonScope();
         bind<IUsersService>(IDENTIFIERS.UsersService).to(UsersService).inSingletonScope();
         bind<IUsersPolicy>(IDENTIFIERS.UsersPolicy).to(UsersPolicy).inSingletonScope();
-        bind<IUsersGuard>(IDENTIFIERS.UsersGuard).to(UsersGuard).inSingletonScope();
         bind<IUsersRepository>(IDENTIFIERS.UsersRepository).to(PrismaUsersRepository).inSingletonScope();
     });
 }

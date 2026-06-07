@@ -9,6 +9,7 @@ import type { IUsersController } from '../../modules/users/controller/users.cont
 import type { IErrorHandler } from '../handlers/error/error.handler.interface.js';
 import type { INotFoundHandler } from '../handlers/notfound/notfound.handler.interface.js';
 import { IDENTIFIERS } from '../identifiers.js';
+import type { ILogger } from '../loggers/logger.interface.js';
 import type { IMiddleware } from '../middlewares/middleware.interface.js';
 import { AApp } from './abstract.app.js';
 import type { IAppConfig } from './app.config.interface.js';
@@ -20,6 +21,7 @@ export class App extends AApp {
         @inject(IDENTIFIERS.ShapingMiddleware) shapingMiddlware: IMiddleware,
         @inject(IDENTIFIERS.NotFoundHandler) notFoundHandler: INotFoundHandler,
         @inject(IDENTIFIERS.ErrorHandler) errorHandler: IErrorHandler,
+        @inject(IDENTIFIERS.Logger) logger: ILogger,
         @inject(IDENTIFIERS.AuthController) authController: IAuthController,
         @inject(IDENTIFIERS.UsersController) usersController: IUsersController,
         @inject(IDENTIFIERS.ProfilesController) profilesController: IProfilesController,
@@ -27,7 +29,7 @@ export class App extends AApp {
         @inject(IDENTIFIERS.CommentsController) commentsController: ICommentsController,
         @inject(IDENTIFIERS.LikesController) likesController: ILikesController,
     ) {
-        super(config, shapingMiddlware, notFoundHandler, errorHandler);
+        super(config, shapingMiddlware, notFoundHandler, errorHandler, logger);
         super.addController(authController);
         super.addController(usersController);
         super.addController(profilesController);

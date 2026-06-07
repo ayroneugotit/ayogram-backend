@@ -21,7 +21,7 @@ export abstract class AController implements IController {
     protected addEndpoint(endpoint: HTTPEndpoint): void {
         if (this._endpoints.find((e) => e.path === endpoint.path && e.method === endpoint.method)) {
             throw new AppError({
-                message: 'endpoint with this path already exists',
+                message: `endpoint with path '${this.path + endpoint.path}' already exists`,
                 source: this.constructor.name,
             });
         }
